@@ -1,8 +1,8 @@
 // PostCSS configuration for Tailwind CSS v4
-// Using object form so additional plugins can be added later if needed.
+// Using the correct plugin format for Tailwind v4
 const config = {
   plugins: {
-    tailwindcss: {},
+    '@tailwindcss/postcss': {},
     autoprefixer: {},
   },
 };
