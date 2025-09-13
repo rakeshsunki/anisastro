@@ -5,7 +5,6 @@ const PaymentVerificationSchema = new mongoose.Schema(
     userEmail: {
       type: String,
       required: true,
-      index: true,
     },
     category: {
       type: String,
@@ -21,7 +20,6 @@ const PaymentVerificationSchema = new mongoose.Schema(
       type: String,
       enum: ['pending', 'verified', 'rejected', 'refunded'],
       default: 'pending',
-      index: true,
     },
     paymentMethod: {
       type: String,

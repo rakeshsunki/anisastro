@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 const categories = [
@@ -14,7 +14,7 @@ const categories = [
 function ChatHistory({ category, messages, onSendMessage }) {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const messagesRef = useState(null)[0];
+  const messagesRef = useRef(null);
 
   const handleSend = async (e) => {
     e.preventDefault();
@@ -35,8 +35,8 @@ function ChatHistory({ category, messages, onSendMessage }) {
 
   // Auto-scroll to bottom when messages change
   useEffect(() => {
-    if (messagesRef && messagesRef.lastElementChild) {
-      messagesRef.lastElementChild.scrollIntoView({ behavior: 'smooth' });
+    if (messagesRef.current && messagesRef.current.lastElementChild) {
+      messagesRef.current.lastElementChild.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages, messagesRef]);
 
@@ -51,7 +51,7 @@ function ChatHistory({ category, messages, onSendMessage }) {
       </div>
 
       {/* Messages */}
-      <div className="flex-1 p-4 overflow-y-auto space-y-3" ref={(el)=>{ if (el) (messagesRef = el); }}>
+      <div className="flex-1 p-4 overflow-y-auto space-y-3" ref={messagesRef}>
         {messages.length === 0 ? (
           <p className="text-gray-500 text-center pt-10 text-sm">No messages yet. Start a conversation!</p>
         ) : (
@@ -105,7 +105,7 @@ function ChatHistory({ category, messages, onSendMessage }) {
   );
 }
 
-export default function Dashboard() {
+function DashboardContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get('email');
@@ -294,5 +294,24 @@ export default function Dashboard() {
         </div>
       </div>
     </div>
+  );
+}
+
+function DashboardLoadingFallback() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 flex items-center justify-center">
+      <div className="text-white text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+        <p>Loading dashboard...</p>
+      </div>
+    </div>
+  );
+}
+
+export default function Dashboard() {
+  return (
+    <Suspense fallback={<DashboardLoadingFallback />}>
+      <DashboardContent />
+    </Suspense>
   );
 }

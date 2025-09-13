@@ -42,7 +42,7 @@ const UserSchema = new mongoose.Schema(
 );
 
 // Indexes for better query performance
-UserSchema.index({ email: 1 });
+// Note: email index is automatically created by unique: true
 UserSchema.index({ paidCategories: 1 });
 
 export const User = mongoose.models.User || mongoose.model('User', UserSchema);

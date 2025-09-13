@@ -5,13 +5,11 @@ const MessageSchema = new mongoose.Schema(
     userEmail: {
       type: String,
       required: true,
-      index: true,
     },
     category: {
       type: String,
       required: true,
       enum: ['Love', 'Life', 'Career', 'Partner', 'Future'],
-      index: true,
     },
     text: {
       type: String,
