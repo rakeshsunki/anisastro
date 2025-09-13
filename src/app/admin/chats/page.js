@@ -120,7 +120,9 @@ export default function AdminChats() {
         setNewMessage('');
         fetchConversations(); // Refresh conversation list
       } else {
-        alert('Failed to send message');
+        const errorData = await response.json();
+        console.error('Failed to send message:', errorData);
+        alert(`Failed to send message: ${errorData.error || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Error sending message:', error);

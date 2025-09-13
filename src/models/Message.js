@@ -18,7 +18,7 @@ const MessageSchema = new mongoose.Schema(
     role: {
       type: String,
       required: true,
-      enum: ['user', 'astrologer', 'ai'],
+      enum: ['user', 'astrologer', 'ai', 'admin'],
       default: 'user',
     },
     isRead: {
