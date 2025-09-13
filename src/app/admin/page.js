@@ -131,12 +131,12 @@ export default function AdminDashboard() {
                 {isVerifying ? 'Verifying...' : 'Access Admin Panel'}
               </button>
               
-              <a
+              <Link
                 href="/"
                 className="block w-full text-center bg-white/10 hover:bg-white/20 text-white py-3 px-4 rounded-lg transition-colors"
               >
                 Back to Home
-              </a>
+              </Link>
             </div>
           </form>
         </div>

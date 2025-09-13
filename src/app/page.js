@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Home() {
   const [email, setEmail] = useState('');
@@ -202,7 +203,7 @@ export default function Home() {
 
           {/* Admin Access */}
           <div className="text-center">
-            <a
+            <Link
               href="/admin"
               className="inline-flex items-center gap-2 text-indigo-300 hover:text-indigo-200 text-sm transition-colors"
             >
@@ -210,7 +211,7 @@ export default function Home() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
               Admin Portal
-            </a>
+            </Link>
           </div>
 
           {/* Features Preview */}
