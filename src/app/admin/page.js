@@ -160,31 +160,32 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 overflow-x-hidden max-w-full">
       {/* Header */}
       <div className="bg-white/10 backdrop-blur-sm border-b border-white/20 p-4 overflow-x-hidden">
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-4">
-          <div className="flex items-center gap-3">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-2 sm:px-4">
+          <div className="flex items-center gap-2 sm:gap-3">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-yellow-600 text-white">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
                 <path fillRule="evenodd" d="M12.516 2.17a.75.75 0 00-1.032 0 11.209 11.209 0 01-7.877 3.08.75.75 0 00-.722.515A12.74 12.74 0 002.25 9.75c0 5.814 3.051 10.892 7.747 14.14a.75.75 0 00.972 0 11.209 11.209 0 007.747-14.14.75.75 0 00-.722-.515 11.209 11.209 0 01-7.877-3.08z" clipRule="evenodd" />
               </svg>
             </div>
-            <span className="text-xl font-bold text-white">AnisAstro Admin</span>
+            <span className="text-lg sm:text-xl font-bold text-white truncate">AnisAstro Admin</span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1 sm:gap-4 flex-wrap">
             <Link
               href="/admin/chats"
-              className="bg-white/10 hover:bg-white/20 text-white px-3 py-1 rounded text-sm transition-colors"
+              className="bg-white/10 hover:bg-white/20 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm transition-colors whitespace-nowrap"
             >
-              Chat Inbox
+              <span className="hidden sm:inline">Chat Inbox</span>
+              <span className="sm:hidden">Chat</span>
             </Link>
             <button
               onClick={() => setIsAuthenticated(false)}
-              className="bg-white/10 hover:bg-white/20 text-white px-3 py-1 rounded text-sm transition-colors"
+              className="bg-white/10 hover:bg-white/20 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm transition-colors whitespace-nowrap"
             >
               Logout
             </button>
             <Link
               href="/"
-              className="bg-white/10 hover:bg-white/20 text-white px-3 py-1 rounded text-sm transition-colors"
+              className="bg-white/10 hover:bg-white/20 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm transition-colors whitespace-nowrap"
             >
               Home
             </Link>

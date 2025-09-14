@@ -164,6 +164,18 @@ export default function AdminChats() {
               {isLoading ? 'Verifying...' : 'Access Chat Portal'}
             </button>
           </form>
+          
+          <div className="mt-6 text-center">
+            <Link
+              href="/admin"
+              className="inline-flex items-center gap-2 text-indigo-300 hover:text-white transition-colors text-sm"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
+                <path fillRule="evenodd" d="M7.28 7.72a.75.75 0 010 1.06l-2.47 2.47H21a.75.75 0 010 1.5H4.81l2.47 2.47a.75.75 0 11-1.06 1.06L2.47 12.53a.75.75 0 010-1.06l3.75-3.75a.75.75 0 011.06 0z" clipRule="evenodd" />
+              </svg>
+              Back to Payment Dashboard
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -173,31 +185,32 @@ export default function AdminChats() {
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 overflow-x-hidden max-w-full">
       {/* Header */}
       <div className="bg-white/10 backdrop-blur-sm border-b border-white/20 p-4 overflow-x-hidden">
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-4">
-          <div className="flex items-center gap-3">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-2 sm:px-4">
+          <div className="flex items-center gap-2 sm:gap-3">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
                 <path fillRule="evenodd" d="M4.848 2.771A49.144 49.144 0 0112 2.25c2.43 0 4.817.178 7.152.52 1.978.292 3.348 2.024 3.348 3.97v6.02c0 1.946-1.37 3.678-3.348 3.97a48.901 48.901 0 01-3.476.383.39.39 0 00-.297.17l-2.755 4.133a.75.75 0 01-1.248 0l-2.755-4.133a.39.39 0 00-.297-.17 48.9 48.9 0 01-3.476-.384c-1.978-.29-3.348-2.024-3.348-3.97V6.741c0-1.946 1.37-3.678 3.348-3.97z" clipRule="evenodd" />
               </svg>
             </div>
-            <span className="text-xl font-bold text-white">Chat Inbox</span>
+            <span className="text-lg sm:text-xl font-bold text-white truncate">Chat Inbox</span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1 sm:gap-4 flex-wrap">
             <Link
               href="/admin"
-              className="bg-white/10 hover:bg-white/20 text-white px-3 py-1 rounded text-sm transition-colors"
+              className="bg-white/10 hover:bg-white/20 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm transition-colors whitespace-nowrap"
             >
-              Payment Dashboard
+              <span className="hidden sm:inline">Payment Dashboard</span>
+              <span className="sm:hidden">Dashboard</span>
             </Link>
             <button
               onClick={() => setIsAuthenticated(false)}
-              className="bg-white/10 hover:bg-white/20 text-white px-3 py-1 rounded text-sm transition-colors"
+              className="bg-white/10 hover:bg-white/20 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm transition-colors whitespace-nowrap"
             >
               Logout
             </button>
             <Link
               href="/"
-              className="bg-white/10 hover:bg-white/20 text-white px-3 py-1 rounded text-sm transition-colors"
+              className="bg-white/10 hover:bg-white/20 text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm transition-colors whitespace-nowrap"
             >
               Home
             </Link>
@@ -205,11 +218,11 @@ export default function AdminChats() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto p-6 overflow-x-hidden">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-12rem)] overflow-x-hidden">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6 overflow-x-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 h-[calc(100vh-12rem)] overflow-x-hidden">
           {/* Conversations List */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 p-4 overflow-x-hidden">
-            <h3 className="text-lg font-semibold text-white mb-4">Active Conversations</h3>
+          <div className="bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 p-3 sm:p-4 overflow-x-hidden">
+            <h3 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4 truncate">Active Conversations</h3>
             <div className="space-y-2 overflow-y-auto max-h-full">
               {conversations.length === 0 ? (
                 <p className="text-indigo-200 text-sm">No conversations yet</p>
@@ -275,21 +288,28 @@ export default function AdminChats() {
                 </div>
 
                 {/* Message Input */}
-                <form onSubmit={handleSendMessage} className="p-4 border-t border-white/20">
-                  <div className="flex gap-3">
+                <form onSubmit={handleSendMessage} className="p-3 sm:p-4 border-t border-white/20">
+                  <div className="flex gap-2 sm:gap-3">
                     <input
                       type="text"
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
                       placeholder="Type your response..."
-                      className="flex-1 rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-white placeholder:text-indigo-200/60 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
+                      className="flex-1 rounded-lg border border-white/20 bg-white/10 px-3 sm:px-4 py-2 text-white placeholder:text-indigo-200/60 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/60 text-sm sm:text-base min-w-0"
                     />
                     <button
                       type="submit"
                       disabled={sendingMessage || !newMessage.trim()}
-                      className="bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-600/50 text-white px-4 py-2 rounded-lg transition-colors"
+                      className="bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-600/50 text-white px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm sm:text-base whitespace-nowrap flex-shrink-0"
                     >
-                      {sendingMessage ? 'Sending...' : 'Send'}
+                      {sendingMessage ? (
+                        <span className="sm:hidden">...</span>
+                      ) : (
+                        <span className="sm:hidden">Send</span>
+                      )}
+                      <span className="hidden sm:inline">
+                        {sendingMessage ? 'Sending...' : 'Send'}
+                      </span>
                     </button>
                   </div>
                 </form>

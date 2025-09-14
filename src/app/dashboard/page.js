@@ -83,24 +83,44 @@ function ChatHistory({ category, messages, onSendMessage }) {
         )}
       </div>
 
-      {/* Input (sticks to bottom) */}
-      <form onSubmit={handleSend} className="p-3 border-t flex gap-2 bg-white/95">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder={`Ask about ${category.title.toLowerCase()}...`}
-          className="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
-          disabled={isLoading}
-        />
-        <button
-          type="submit"
-          disabled={isLoading || !input.trim()}
-          className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
-        >
-          {isLoading ? '...' : 'Send'}
-        </button>
-      </form>
+      {/* Input with Payment (sticks to bottom) */}
+      <div className="border-t bg-white/95">
+        <form onSubmit={handleSend} className="p-3">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder={`Ask about ${category.title.toLowerCase()}...`}
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm mb-3"
+            disabled={isLoading}
+          />
+          
+          {/* PhonePe QR Code */}
+          {input.trim() && (
+            <div className="mb-3 text-center">
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 inline-block">
+                <div className="w-32 h-32 mx-auto mb-2 flex items-center justify-center bg-white rounded border border-gray-200">
+                  <img 
+                    src="/phonepay.jpeg" 
+                    alt="PhonePe QR Code" 
+                    className="w-full h-full object-contain rounded"
+                  />
+                </div>
+                <p className="text-xs text-gray-600 mb-1">Scan to Pay ₹10</p>
+                <p className="text-[10px] text-gray-500">Pay using any UPI app</p>
+              </div>
+            </div>
+          )}
+          
+          <button
+            type="submit"
+            disabled={isLoading || !input.trim()}
+            className="w-full bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+          >
+            {isLoading ? 'Submitting...' : "I've Paid & Submit"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
