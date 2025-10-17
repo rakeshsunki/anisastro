@@ -14,11 +14,18 @@ const categories = [
 function ChatHistory({ category, messages, onSendMessage }) {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [paymentConfirmed, setPaymentConfirmed] = useState(false);
   const messagesRef = useRef(null);
 
   const handleSend = async (e) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
+
+    // Check if payment is confirmed when there's text input
+    if (input.trim() && !paymentConfirmed) {
+      alert('Please confirm that you have paid ₹10 before submitting your question.');
+      return;
+    }
 
     setIsLoading(true);
     const newMessage = {
@@ -30,6 +37,7 @@ function ChatHistory({ category, messages, onSendMessage }) {
 
     await onSendMessage(category.title, newMessage);
     setInput("");
+    setPaymentConfirmed(false); // Reset checkbox after successful submission
     setIsLoading(false);
   };
 
@@ -111,13 +119,29 @@ function ChatHistory({ category, messages, onSendMessage }) {
               </div>
             </div>
           )}
+
+          {/* Payment Confirmation Checkbox */}
+          {input.trim() && (
+            <div className="mb-3 flex items-center gap-3 bg-gray-50 p-3 rounded-lg border border-gray-200">
+              <input
+                type="checkbox"
+                id="paymentConfirm"
+                checked={paymentConfirmed}
+                onChange={(e) => setPaymentConfirmed(e.target.checked)}
+                className="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500 focus:ring-2"
+              />
+              <label htmlFor="paymentConfirm" className="text-sm text-gray-700 cursor-pointer">
+                I confirm that I have paid ₹10
+              </label>
+            </div>
+          )}
           
           <button
             type="submit"
-            disabled={isLoading || !input.trim()}
+            disabled={isLoading || !input.trim() || (input.trim() && !paymentConfirmed)}
             className="w-full bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
           >
-            {isLoading ? 'Submitting...' : "I've Paid & Submit"}
+            {isLoading ? 'Submitting...' : 'Submit Question'}
           </button>
         </form>
       </div>
