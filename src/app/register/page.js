@@ -285,17 +285,20 @@ export default function RegisterPage() {
 
 	// Payment Component
 	const PaymentStep = () => {
-		const [paymentStep, setPaymentStep] = useState('qr'); // 'qr' or 'confirmation'
+
 		const [userQuestion, setUserQuestion] = useState('');
+		const [paymentConfirmed, setPaymentConfirmed] = useState(false);
 
-		const handleQuestionSubmit = (e) => {
+		const handleQuestionSubmit = async (e) => {
 			e.preventDefault();
-			if (userQuestion.trim()) {
-				setPaymentStep('confirmation');
-			}
-		};
+			if (!userQuestion.trim()) return;
 
-		const handlePaymentConfirmation = async () => {
+			// Check if payment is confirmed
+			if (!paymentConfirmed) {
+				alert('Please confirm that you have paid ₹10 before submitting your question.');
+				return;
+			}
+
 			try {
 				// Submit payment verification to database
 				const response = await fetch('/api/payment/process', {
@@ -308,16 +311,16 @@ export default function RegisterPage() {
 						category: selectedType,
 						amount: 10,
 						question: userQuestion,
-						paymentMethod: 'manual'
+						paymentMethod: 'manual',
+						transactionId: '',
 					}),
 				});
-				
+
 				const result = await response.json();
-				
+
 				if (response.ok) {
 					// Payment submitted successfully
-					setPaymentStatus('completed');
-					handlePaymentSuccess();
+					setStep(4);
 				} else {
 					alert(result.error || 'Failed to submit payment verification. Please try again.');
 				}
@@ -327,58 +330,7 @@ export default function RegisterPage() {
 			}
 		};
 
-		if (paymentStep === 'confirmation') {
-			return (
-				<div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 flex items-center justify-center p-4">
-					<div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full">
-						<div className="text-center mb-6">
-							<div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-								<svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-								</svg>
-							</div>
-							<h2 className="text-2xl font-bold text-gray-900 mb-2">Payment Submitted!</h2>
-							<p className="text-gray-600">Thank you for your question about {selectedType}</p>
-						</div>
 
-						<div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-							<h3 className="font-medium text-blue-900 mb-2">Your Question:</h3>
-							<p className="text-blue-800 text-sm italic">&quot;{userQuestion}&quot;</p>
-						</div>
-
-						<div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-							<div className="flex items-start gap-3">
-								<svg className="w-5 h-5 text-yellow-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z" />
-								</svg>
-								<div>
-									<h3 className="font-medium text-yellow-800">Payment Verification</h3>
-									<p className="text-yellow-700 text-sm mt-1">
-										We will verify your payment and respond within <strong>24 hours</strong>. 
-										If payment is not received, amount will be refunded within <strong>2 days</strong>.
-									</p>
-								</div>
-							</div>
-						</div>
-
-						<div className="space-y-3">
-							<button
-								onClick={handlePaymentConfirmation}
-								className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-4 rounded-lg font-medium transition-colors"
-							>
-								Continue to Chat
-							</button>
-							<button
-								onClick={() => setPaymentStep('qr')}
-								className="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium transition-colors text-sm"
-							>
-								Back to Payment
-							</button>
-						</div>
-					</div>
-				</div>
-			);
-		}
 
 		return (
 			<div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 flex items-center justify-center p-4">
@@ -391,7 +343,7 @@ export default function RegisterPage() {
 						<p className="text-gray-600">Ask your {selectedType.toLowerCase()} question first, then pay ₹10</p>
 					</div>
 
-					<form onSubmit={handleQuestionSubmit} className="mb-6">
+					<form onSubmit={handleQuestionSubmit} className="space-y-4">
 						<label className="block text-sm font-medium text-gray-700 mb-2">
 							Your {selectedType} Question:
 						</label>
@@ -402,56 +354,57 @@ export default function RegisterPage() {
 							className="w-full h-24 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
 							required
 						/>
+
+						{/* PhonePe QR Code - Show when user types */}
+						{userQuestion.trim() && (
+							<div className="text-center py-4">
+								<div className="w-32 h-32 mx-auto mb-2 flex items-center justify-center bg-white rounded border border-gray-200">
+									<Image
+										src="/phonepay.jpeg"
+										alt="PhonePe QR Code"
+										width={128}
+										height={128}
+										className="w-full h-full object-contain rounded"
+										priority
+									/>
+								</div>
+								<p className="text-xs text-gray-600 mb-1">Scan to Pay ₹10</p>
+								<p className="text-[10px] text-gray-500">Pay using any UPI app</p>
+							</div>
+						)}
+
+						{/* Payment Confirmation Checkbox - Show when user types */}
+						{userQuestion.trim() && (
+							<div className="flex items-center gap-3 bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+								<input
+									type="checkbox"
+									id="paymentConfirmRegister"
+									checked={paymentConfirmed}
+									onChange={(e) => setPaymentConfirmed(e.target.checked)}
+									className="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 rounded focus:ring-indigo-500 focus:ring-2"
+								/>
+								<label htmlFor="paymentConfirmRegister" className="text-sm text-gray-700 cursor-pointer">
+									I confirm that I have paid ₹10
+								</label>
+							</div>
+						)}
+
 						<button
 							type="submit"
-							className="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-4 rounded-lg font-medium transition-colors"
+							disabled={!userQuestion.trim() || (userQuestion.trim() && !paymentConfirmed)}
+							className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 px-4 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
 						>
-							Submit Question & Pay ₹10
+							Submit Question
+						</button>
+
+						<button
+							type="button"
+							onClick={() => setStep(2)}
+							className="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium transition-colors text-sm"
+						>
+							Back to Categories
 						</button>
 					</form>
-
-					{userQuestion && (
-						<>
-						<div className="border-t pt-6">
-							<h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">Pay ₹10 via UPI</h3>
-							
-							{/* PhonePe QR Code */}
-							<div className="w-48 h-48 mx-auto mb-3 flex items-center justify-center bg-white rounded-lg border border-gray-200">
-								<Image
-									src="/phonepay.jpeg"
-									alt="PhonePe QR Code"
-									width={192}
-									height={192}
-									className="object-contain rounded-lg"
-									priority
-								/>
-							</div>
-
-							<p className="text-sm text-gray-600 mb-2">Scan QR Code to Pay</p>
-							<p className="text-xs text-gray-500">Pay ₹10 using any UPI app</p>
-						</div>
-
-							<div className="text-center mb-4">
-								<p className="text-sm text-gray-600 mb-2">Or pay to UPI ID:</p>
-								<p className="font-mono text-sm bg-gray-100 px-3 py-2 rounded border">your-upi-id@paytm</p>
-							</div>
-
-							<div className="space-y-3">
-								<button
-									onClick={() => setPaymentStep('confirmation')}
-									className="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg font-medium transition-colors"
-								>
-									I&apos;ve Paid ₹10
-								</button>
-								<button
-									onClick={() => setStep(2)}
-									className="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium transition-colors text-sm"
-								>
-									Back to Categories
-								</button>
-							</div>
-						</>
-					)}
 				</div>
 			</div>
 		);

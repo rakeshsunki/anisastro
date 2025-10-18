@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "Anisastro",
-  description: "An astrology application by Rakesh Sunki",
+  description: 'Get accurate astrology predictions for love, career, and life. Chat with expert astrologers.',
 };
 
 export default function RootLayout({ children }) {
