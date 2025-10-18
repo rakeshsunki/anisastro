@@ -1,5 +1,6 @@
 "use client";
 
+import Image from 'next/image';
 import { useState, useEffect, useCallback, Suspense, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -106,17 +107,18 @@ function ChatHistory({ category, messages, onSendMessage }) {
           {/* PhonePe QR Code */}
           {input.trim() && (
             <div className="mb-3 text-center">
-              <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 inline-block">
-                <div className="w-32 h-32 mx-auto mb-2 flex items-center justify-center bg-white rounded border border-gray-200">
-                  <img 
-                    src="/phonepay.jpeg" 
-                    alt="PhonePe QR Code" 
-                    className="w-full h-full object-contain rounded"
-                  />
-                </div>
-                <p className="text-xs text-gray-600 mb-1">Scan to Pay ₹10</p>
-                <p className="text-[10px] text-gray-500">Pay using any UPI app</p>
+              <div className="w-32 h-32 mx-auto mb-2 flex items-center justify-center bg-white rounded border border-gray-200">
+                <Image
+                  src="/phonepay.jpeg"
+                  alt="PhonePe QR Code"
+                  width={128}
+                  height={128}
+                  className="w-full h-full object-contain rounded"
+                  priority
+                />
               </div>
+              <p className="text-xs text-gray-600 mb-1">Scan to Pay ₹10</p>
+              <p className="text-[10px] text-gray-500">Pay using any UPI app</p>
             </div>
           )}
 

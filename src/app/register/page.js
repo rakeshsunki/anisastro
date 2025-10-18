@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 const items = [
 	{
@@ -220,6 +221,7 @@ export default function RegisterPage() {
 	});
 	const [selectedType, setSelectedType] = useState("");
 	const [paymentStatus, setPaymentStatus] = useState('pending'); // pending, processing, completed, failed
+	const [isLoading, setIsLoading] = useState(false);
 
 	const onChange = (e) => {
 		const { name, value } = e.target;
@@ -228,6 +230,7 @@ export default function RegisterPage() {
 
 	const handleFormSubmit = async (e) => {
 		e.preventDefault();
+		setIsLoading(true);
 		
 		try {
 			// Create user in database
@@ -255,6 +258,8 @@ export default function RegisterPage() {
 		} catch (error) {
 			console.error('Error creating user:', error);
 			alert('Failed to create account. Please check your internet connection and try again.');
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -406,21 +411,25 @@ export default function RegisterPage() {
 					</form>
 
 					{userQuestion && (
+						<>
 						<div className="border-t pt-6">
 							<h3 className="text-lg font-semibold text-gray-900 mb-4 text-center">Pay ₹10 via UPI</h3>
 							
 							{/* PhonePe QR Code */}
-							<div className="bg-gray-100 border-2 border-gray-300 rounded-lg p-4 text-center mb-4">
-								<div className="w-48 h-48 mx-auto mb-3 flex items-center justify-center bg-white rounded-lg border border-gray-200">
-									<img 
-										src="/phonepay.jpeg" 
-										alt="PhonePe QR Code" 
-										className="w-full h-full object-contain rounded-lg"
-									/>
-								</div>
-								<p className="text-sm text-gray-600 mb-2">Scan QR Code to Pay</p>
-								<p className="text-xs text-gray-500">Pay ₹10 using any UPI app</p>
+							<div className="w-48 h-48 mx-auto mb-3 flex items-center justify-center bg-white rounded-lg border border-gray-200">
+								<Image
+									src="/phonepay.jpeg"
+									alt="PhonePe QR Code"
+									width={192}
+									height={192}
+									className="object-contain rounded-lg"
+									priority
+								/>
 							</div>
+
+							<p className="text-sm text-gray-600 mb-2">Scan QR Code to Pay</p>
+							<p className="text-xs text-gray-500">Pay ₹10 using any UPI app</p>
+						</div>
 
 							<div className="text-center mb-4">
 								<p className="text-sm text-gray-600 mb-2">Or pay to UPI ID:</p>
@@ -441,7 +450,7 @@ export default function RegisterPage() {
 									Back to Categories
 								</button>
 							</div>
-						</div>
+						</>
 					)}
 				</div>
 			</div>
@@ -848,9 +857,20 @@ export default function RegisterPage() {
 						<div className="md:col-span-2">
 							<button
 								type="submit"
-								className="w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-white shadow-sm transition hover:bg-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+								disabled={isLoading}
+								className="w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-white shadow-sm transition hover:bg-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
 							>
-								Continue to Astrology Exploration
+								{isLoading ? (
+									<>
+										<svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+											<circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+											<path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+										</svg>
+										Creating Account...
+									</>
+								) : (
+									'Continue to Astrology Exploration'
+								)}
 							</button>
 						</div>
 					</form>
